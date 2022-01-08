@@ -173,12 +173,4 @@ const docavailSchema=new mongoose.Schema({
 
 const doct_avail=mongoose.model('doctor',docavailSchema);
 
-
-
-
-
-
-
-
-
 module.exports= {patient , doctor,department,bed,emergency_doct,appointment,doct_avail};

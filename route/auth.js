@@ -1,7 +1,15 @@
 
 const express= require('express');
 const mongoose=require("mongoose");
-const { patient,doctor,department,bed,emergency_doct,appointment,doct_avail } = require('../database/models');
+
+const patient=require("../models/patient");
+const doctor=require("../models/doctor");
+const department=require('../models/department');
+const bed=require("../models/beds");
+const emergency_doct=require("../models/emergdoctor");
+const appointment=require("../models/appointment");
+const doct_avail=require("../models/doctavail");
+
 const router= express.Router();
 const ObjectId = require('mongodb').ObjectId;
 
@@ -64,6 +72,7 @@ router.post("/adddoc" ,function(req,res){
      return res.status(422).json({error:"plz fill all details . "});
     }
     else {
+        
           doctor.findOne({number:number},function(err,founddoc){
               if(err){
                   console.log(err);
@@ -76,10 +85,11 @@ router.post("/adddoc" ,function(req,res){
                        if(!e){  
                             if(doc){
                                  const dept_id = new ObjectId(doc._id);
+                                 
                                  const newdoctor=new doctor({fullname,dob,number,gender,dept_id,address });
                                  newdoctor.save(function(er){
                                  if(er){
-                                     console.log("not save");
+                                     console.log('doctor is Not save');
                                        }else{
                                            return res.status(200).json({message:"done "});
                                             }
@@ -140,6 +150,19 @@ router.post("/addemergency" , function(req,res){
        });
     }
 });
+
+//---------------->>>>>>  find all departments <<<<<<<------------------//
+
+router.get("/alldepartments",function(req,res){
+    department.find( {},{dept_name:1,_id:0},function(err,depts){
+       
+        console.log(depts);
+        res.send(depts);
+        
+    });
+});
+
+
 
 
 module.exports=router;
